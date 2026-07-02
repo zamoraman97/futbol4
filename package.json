@@ -1,0 +1,12 @@
+{
+  "name": "mundial-2026-multiview",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web MultiView de canales del Mundial FIFA 2026 (sitio estatico + servidor Node).",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

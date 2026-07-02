@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MundialX · MultiView en vivo</title>
+  <meta name="description" content="Canales del Mundial FIFA 2026 en vivo con MultiView de hasta 4 pantallas." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>" />
+</head>
+<body class="rail-hidden">
+  <div class="aurora"></div>
+
+  <!-- Gate de Términos y Condiciones -->
+  <div class="terms-gate" id="terms-gate" hidden>
+    <div class="terms-card">
+      <span class="terms-logo">🏆</span>
+      <h2>Mundial<span>X</span> · MultiView</h2>
+      <p class="terms-intro">Antes de entrar, lee y acepta los Términos y Condiciones de uso.</p>
+      <div class="terms-body" id="terms-body">
+        <h3>Términos y Condiciones</h3>
+        <p>1. Este sitio es un proyecto personal sin fines de lucro y no aloja, almacena ni retransmite ningún contenido de vídeo. Únicamente organiza y enlaza a flujos (streams) de acceso público que están alojados por terceros.</p>
+        <p>2. La disponibilidad, legalidad y calidad de cada canal dependen exclusivamente de sus proveedores. Pueden dejar de funcionar, estar geo-bloqueados o cambiar sin previo aviso.</p>
+        <p>3. El usuario es el único responsable del uso que haga de los enlaces y debe asegurarse de cumplir las leyes de derechos de autor y de retransmisión vigentes en su país.</p>
+        <p>4. No se ofrece ninguna garantía sobre el servicio. El contenido se proporciona "tal cual", sin responsabilidad por interrupciones, daños o pérdidas derivadas de su uso.</p>
+        <p>5. Si eres titular de derechos y consideras que un enlace infringe los tuyos, la retirada debe solicitarse a la fuente original que aloja el contenido.</p>
+        <p>6. Al continuar, declaras ser mayor de edad en tu jurisdicción y aceptar íntegramente estas condiciones.</p>
+      </div>
+      <label class="terms-check">
+        <input type="checkbox" id="terms-accept" />
+        <span>He leído y acepto los Términos y Condiciones.</span>
+      </label>
+      <button class="terms-enter" id="terms-enter" disabled>Entrar</button>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a class="logo" href="#top">Mundial<span>X</span></a>
+      <nav class="nav-links">
+        <button class="nav-link active" data-nav="home">Inicio</button>
+        <button class="nav-link" data-nav="sports" id="nav-sports">Deportes</button>
+        <button class="nav-link" data-nav="live" id="nav-live">Canales en vivo</button>
+        <button class="nav-link" data-nav="multi" id="nav-multi">Multipantalla</button>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <button class="nav-action" id="rail-toggle" title="Buscar y explorar canales">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <span>Buscar</span>
+      </button>
+      <button class="nav-icon" id="terms-open" title="Términos y Condiciones">
+        <svg viewBox="0 0 24 24"><path d="M8 4h9l3 3v13H8z"/><path d="M8 4H4v16h4"/><path d="M11 9h6M11 13h6M11 17h4"/></svg>
+      </button>
+      <div class="nav-avatar" title="Invitado">M</div>
+    </div>
+  </header>
+
+  <main class="page" id="top">
+    <!-- Hero / cabecera de sección -->
+    <section class="hero">
+      <div class="hero-title">
+        <span class="hero-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </span>
+        <div>
+          <h1><span id="screen-count">1</span> PANTALLA<span id="screen-plural"></span></h1>
+          <p>Disfruta hasta 4 contenidos diferentes al mismo tiempo</p>
+        </div>
+      </div>
+
+      <div class="layout-controls" id="layout-controls">
+        <span class="lc-label">Pantalla múltiple</span>
+        <button class="lc-btn active" data-grid="1" title="1 pantalla">
+          <svg viewBox="0 0 20 20"><rect x="2" y="2" width="16" height="16" rx="2"/></svg>
+        </button>
+        <button class="lc-btn" data-grid="2" title="2 pantallas">
+          <svg viewBox="0 0 20 20"><rect x="2" y="2" width="7" height="16" rx="2"/><rect x="11" y="2" width="7" height="16" rx="2"/></svg>
+        </button>
+        <button class="lc-btn" data-grid="3" title="3 pantallas">
+          <svg viewBox="0 0 20 20"><rect x="2" y="2" width="16" height="7" rx="2"/><rect x="2" y="11" width="7" height="7" rx="2"/><rect x="11" y="11" width="7" height="7" rx="2"/></svg>
+        </button>
+        <button class="lc-btn" data-grid="4" title="4 pantallas">
+          <svg viewBox="0 0 20 20"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- MultiView -->
+    <section class="stage-wrap">
+      <section class="stage" id="stage" data-grid="1"></section>
+    </section>
+
+    <!-- Barra de características -->
+    <section class="features">
+      <div class="feature">
+        <span class="feat-ico">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="3" y="13" width="8" height="7" rx="1.5"/><rect x="13" y="13" width="8" height="7" rx="1.5"/></svg>
+        </span>
+        <div><b>4 Pantallas simultáneas</b><span>Mira diferente contenido a la vez</span></div>
+      </div>
+      <div class="feature">
+        <span class="feat-ico">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v11H4z"/><path d="M2 20h20"/></svg>
+        </span>
+        <div><b>Calidad HD</b><span>La mejor imagen que ofrezca el canal</span></div>
+      </div>
+      <div class="feature">
+        <span class="feat-ico">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </span>
+        <div><b>100% en vivo</b><span>Señales en directo del Mundial</span></div>
+      </div>
+      <div class="feature">
+        <span class="feat-ico">
+          <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z"/><path d="M8 8l8 8M16 8l-8 8"/></svg>
+        </span>
+        <div><b>Sin cuentas</b><span>Entra y mira, sin registros</span></div>
+      </div>
+    </section>
+
+    <footer class="page-foot">
+      <p>MundialX no aloja vídeo; solo enlaza a streams públicos de terceros.
+      <button class="link-btn" id="terms-open-2">Términos y Condiciones</button></p>
+    </footer>
+  </main>
+
+  <!-- Panel lateral de canales -->
+  <aside class="rail collapsed" id="rail">
+    <div class="rail-head">
+      <div class="rail-title">
+        <h3>Canales en vivo</h3>
+        <button class="rail-close" id="rail-close" title="Cerrar">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="searchbox">
+        <svg class="search-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="search" type="search" placeholder="Buscar canal…" autocomplete="off" />
+      </div>
+      <div class="rail-meta">
+        <span id="count">Cargando…</span>
+        <span class="hint-mini">Toca un canal para enviarlo a la pantalla en foco</span>
+      </div>
+    </div>
+    <ul id="channel-list" class="channel-list"></ul>
+    <footer class="rail-foot">
+      <p>Este sitio no aloja vídeo; enlaza a streams públicos de terceros.</p>
+    </footer>
+  </aside>
+
+  <div class="rail-backdrop" id="rail-backdrop"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

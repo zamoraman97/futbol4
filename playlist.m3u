@@ -1,0 +1,36 @@
+#EXTM3U
+# Canales con derechos del Mundial FIFA 2026
+#EXTINF:-1 tvg-id="Fox.us" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Fox_Networks_Group_US_logo.svg/960px-Fox_Networks_Group_US_logo.svg.png" group-title="USA",FOX (USA · inglés)
+http://84.17.50.102/fox/index.m3u8
+#EXTINF:-1 tvg-id="FoxDeportes.us" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/FOX_Deportes_logo.png/960px-FOX_Deportes_logo.png" group-title="USA",Fox Deportes (USA · español)
+http://23.237.104.106:8080/USA_FOX_DEPORTES/index.m3u8
+#EXTINF:-1 tvg-id="TelemundoAlDia.us" tvg-logo="https://images.fubo.tv/channel-config-ui/station-logos/on-white/telemundo_al_dia_1000x1500_2x3_logo_300dpi_vertical_full_color_logo_xumo-3-copy.png" group-title="USA",Telemundo (USA · español)
+https://d1rqgw5gocwo9i.cloudfront.net/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod_default_xumo-nbcu-stitched/10a44c37-f976-4d2b-ab23-8637a7a094ca/3.m3u8
+#EXTINF:-1 tvg-id="AztecaInternacional.mx" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/e/eb/Azteca_Internacional_logo_2023.png" group-title="México",TV Azteca (Azteca Deportes)
+https://azt-mun.otteravision.com/azt/mun/mun.m3u8
+#EXTINF:-1 tvg-id="LasEstrellas.mx" tvg-logo="https://i.imgur.com/g5ShxZ7.png" group-title="México",Las Estrellas (Televisa)
+https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
+#EXTINF:-1 tvg-id="Canal5.mx" tvg-logo="https://i.imgur.com/uZdVSoW.png" group-title="México",Canal 5
+http://190.11.225.124:5000/live/canal5_hd/playlist.m3u8
+#EXTINF:-1 tvg-id="TUDN.mx" tvg-logo="https://i.imgur.com/oT5CAvd.png" group-title="México",TUDN
+https://streaming.alwaysdata.net/tudn.php
+#EXTINF:-1 tvg-id="DSports.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports
+http://190.117.20.37:8000/play/a08d/index.m3u8
+#EXTINF:-1 tvg-id="TyCSports.ar" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/0d/TyC_Sports_logo.png" group-title="Sudamérica",TyC Sports (Argentina)
+https://amg26268-amg26268c14-freelivesports-emea-10267.playouts.now.amagi.tv/ts-us-e2-n2/playlist/amg26268-sportsstudio-tycsports-freelivesportsemea/playlist.m3u8
+#EXTINF:-1 tvg-id="DSports2.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports 2
+https://cors-proxy.cooks.fyi/http://147.135.114.221:8001/play/a00n/index.m3u8
+#EXTINF:-1 tvg-id="DSportsPlus.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports+
+https://cors-proxy.cooks.fyi/http://147.135.114.221:8001/play/a00o/index.m3u8
+#EXTINF:-1 tvg-id="RTVELa1.es" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/La_1_logo_2023.svg/640px-La_1_logo_2023.svg.png" group-title="España",RTVE La 1
+https://ztnr.rtve.es/ztnr/1688877.m3u8
+#EXTINF:-1 tvg-id="GOL.es" tvg-logo="https://i.imgur.com/0Qj5KQF.png" group-title="España",GOL (Mediapro)
+https://adpnetworkhd-cmd.github.io/iptv/GOL.m3u8
+#EXTINF:-1 tvg-id="DAZN1.es" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/DAZN_Logo_Master.svg/640px-DAZN_Logo_Master.svg.png" group-title="España",DAZN (España) 1
+https://cors-proxy.cooks.fyi/http://185.228.155.93:8000/play/a03q/index.m3u8
+#EXTINF:-1 tvg-id="DAZN2.es" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/DAZN_Logo_Master.svg/640px-DAZN_Logo_Master.svg.png" group-title="España",DAZN (España) 2
+https://cors-proxy.cooks.fyi/http://185.228.155.93:8000/play/a03r/index.m3u8
+#EXTINF:-1 tvg-id="BBCOne.uk" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BBC_One_logo_2021.svg/960px-BBC_One_logo_2021.svg.png" group-title="Reino Unido",BBC One
+https://adpnetworkhd-cmd.github.io/iptv/BBCOne.m3u8
+#EXTINF:-1 tvg-id="ITV1.uk" tvg-logo="https://i.imgur.com/xwPekCF.png" group-title="Reino Unido",ITV1
+http://80.194.62.172:50002/stream/channelid/95929545
