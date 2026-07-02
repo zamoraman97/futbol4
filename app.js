@@ -841,3 +841,35 @@ if (railClose) railClose.addEventListener("click", closeRailPanel);
 
 // El botón "Buscar" enfoca el buscador (en escritorio el panel ya está visible).
 if (els.railToggle) els.railToggle.addEventListener("click", focusSearch);
+
+/* --------------------- Cambio de vista (Deportes/Películas) --------------- */
+
+const sportsView = document.getElementById("sports-view");
+const moviesView = document.getElementById("movies-view");
+const tabButtons = document.querySelectorAll(".tab-btn");
+let moviesInitialized = false;
+
+function switchView(view) {
+  const isMovies = view === "movies";
+  if (moviesView) moviesView.hidden = !isMovies;
+  if (sportsView) sportsView.hidden = isMovies;
+  tabButtons.forEach((b) => b.classList.toggle("active", b.dataset.view === view));
+  document.body.classList.toggle("view-movies", isMovies);
+
+  if (isMovies) {
+    // En películas no aplica el panel lateral de canales.
+    closeRailPanel();
+    if (els.railToggle) els.railToggle.style.display = "none";
+    if (!moviesInitialized && typeof window.initMovies === "function") {
+      moviesInitialized = true;
+      window.initMovies();
+    }
+  } else {
+    if (els.railToggle) els.railToggle.style.display = "";
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => switchView(btn.dataset.view));
+});

@@ -41,6 +41,10 @@
   <header class="navbar">
     <div class="nav-left">
       <a class="logo" href="#top">Futbol<span>4</span></a>
+      <nav class="nav-tabs">
+        <button class="tab-btn active" id="tab-deportes" data-view="sports">Deportes</button>
+        <button class="tab-btn" id="tab-peliculas" data-view="movies">Películas</button>
+      </nav>
     </div>
     <div class="nav-right">
       <button class="nav-action" id="rail-toggle" title="Buscar y explorar canales">
@@ -55,6 +59,7 @@
   </header>
 
   <main class="page" id="top">
+   <div id="sports-view">
     <!-- Hero / cabecera de sección -->
     <section class="hero">
       <div class="hero-title">
@@ -121,7 +126,69 @@
       <p>Futbol4 no aloja vídeo; solo enlaza a streams públicos de terceros.
       <button class="link-btn" id="terms-open-2">Términos y Condiciones</button></p>
     </footer>
+   </div><!-- /#sports-view -->
+
+    <!-- Vista de Películas (VOD) -->
+    <section id="movies-view" hidden>
+      <section class="movies-hero">
+        <div class="hero-title">
+          <span class="hero-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5M16 4v5M8 15h8"/></svg>
+          </span>
+          <div>
+            <h1>PELÍCULAS <span>en español</span></h1>
+            <p>Cine de dominio público — clásicos, Cine de Oro y más</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="movies-toolbar">
+        <div class="searchbox movies-search">
+          <svg class="search-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="movies-search-input" type="search" placeholder="Buscar película…" autocomplete="off" />
+        </div>
+        <div class="movies-filters" id="movies-filters">
+          <button class="mf-btn active" data-filter="all">Populares</button>
+          <button class="mf-btn" data-filter="cine-oro">Cine de Oro</button>
+          <button class="mf-btn" data-filter="terror">Terror</button>
+          <button class="mf-btn" data-filter="comedia">Comedia</button>
+          <button class="mf-btn" data-filter="accion">Acción</button>
+          <button class="mf-btn" data-filter="scifi">Ciencia ficción</button>
+        </div>
+      </div>
+
+      <div class="movies-meta"><span id="movies-count">Cargando películas…</span></div>
+      <div class="movies-grid" id="movies-grid"></div>
+      <div class="movies-more">
+        <button class="load-more" id="movies-load-more" hidden>Cargar más</button>
+        <div class="movies-loader hidden" id="movies-loader"><span class="ml-spin"></span> Cargando…</div>
+      </div>
+
+      <footer class="page-foot">
+        <p>Películas de dominio público servidas por <a class="link-btn" href="https://archive.org" target="_blank" rel="noopener">Internet Archive</a>. Futbol4 no aloja los vídeos.</p>
+      </footer>
+    </section>
   </main>
+
+  <!-- Reproductor de películas -->
+  <div class="movie-modal" id="movie-modal" hidden>
+    <div class="movie-modal-backdrop" id="movie-modal-backdrop"></div>
+    <div class="movie-modal-card">
+      <button class="movie-modal-close" id="movie-modal-close" title="Cerrar">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="movie-video-wrap">
+        <video id="movie-video" controls playsinline preload="metadata"></video>
+        <div class="movie-video-status hidden" id="movie-video-status"></div>
+      </div>
+      <div class="movie-modal-info">
+        <h2 id="movie-modal-title">—</h2>
+        <div class="movie-modal-sub" id="movie-modal-sub"></div>
+        <div class="movie-quality" id="movie-quality"></div>
+        <p class="movie-modal-desc" id="movie-modal-desc"></p>
+      </div>
+    </div>
+  </div>
 
   <!-- Panel lateral de canales -->
   <aside class="rail collapsed" id="rail">
@@ -151,5 +218,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
   <script src="app.js"></script>
+  <script src="movies.js"></script>
 </body>
 </html>
