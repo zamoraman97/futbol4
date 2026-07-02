@@ -458,11 +458,23 @@ function streamUrl(S, ch) {
   return ch.url;
 }
 
+/**
+ * Cuando la página se sirve por HTTPS, los streams http:// se bloquean como
+ * "contenido mixto". Para esos canales arrancamos directamente vía proxy HTTPS
+ * en lugar de intentar la conexión directa (que fallaría siempre).
+ */
+function needsProxyFromStart(ch) {
+  return location.protocol === "https:" && /^http:\/\//i.test(ch.url);
+}
+
 function loadInto(S, ch, opts) {
   opts = opts || {};
   const isRetry = opts.retry;
   S.ch = ch;
-  if (!isRetry) { S.proxyIdx = -1; S.netRetries = 0; S.mediaRetries = 0; }
+  if (!isRetry) {
+    S.proxyIdx = needsProxyFromStart(ch) ? 0 : -1;
+    S.netRetries = 0; S.mediaRetries = 0;
+  }
 
   S.empty.classList.add("hidden");
   S.bar.classList.remove("hidden");
