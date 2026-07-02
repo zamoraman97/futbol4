@@ -10,11 +10,9 @@ const PLAYLIST_URL = "playlist.m3u";
 const MAX_SLOTS = 4;
 const TERMS_KEY = "wc26_terms_ok";
 
-// Proxies de respaldo (se rotan cuando un stream directo falla).
-const PROXIES = [
-  "https://corsproxy.io/?url=",
-  "https://api.allorigins.win/raw?url=",
-];
+// Proxy propio del servidor (mismo origen): reescribe los manifiestos y evita
+// problemas de CORS, contenido mixto y segmentos con rutas relativas.
+const PROXIES = ["/hls?u="];
 
 const els = {
   stage: document.getElementById("stage"),
@@ -41,23 +39,6 @@ let booted = false;
 const slots = [];
 
 /* --------------------------- Loader con proxy ----------------------------- */
-
-/**
- * Crea una subclase del loader por defecto de hls.js que antepone un proxy
- * a TODAS las peticiones (manifiesto + segmentos), no solo a la primera.
- */
-function makeProxyLoader(proxyBase) {
-  if (!window.Hls) return null;
-  const Base = Hls.DefaultConfig.loader;
-  return class ProxyLoader extends Base {
-    load(context, config, callbacks) {
-      if (context && context.url && !context.url.startsWith(proxyBase)) {
-        context.url = proxyBase + encodeURIComponent(context.url);
-      }
-      super.load(context, config, callbacks);
-    }
-  };
-}
 
 /* ----------------------------- Carga de datos ----------------------------- */
 
@@ -459,12 +440,15 @@ function streamUrl(S, ch) {
 }
 
 /**
- * Cuando la página se sirve por HTTPS, los streams http:// se bloquean como
- * "contenido mixto". Para esos canales arrancamos directamente vía proxy HTTPS
- * en lugar de intentar la conexión directa (que fallaría siempre).
+ * Decide si un canal debe arrancar directamente vía proxy en lugar de intentar
+ * la conexión directa primero:
+ *  - Streams http:// en una página https:// (contenido mixto, siempre falla).
+ *  - Manifiestos .php (p. ej. TUDN) que reparten segmentos sin CORS.
  */
 function needsProxyFromStart(ch) {
-  return location.protocol === "https:" && /^http:\/\//i.test(ch.url);
+  if (location.protocol === "https:" && /^http:\/\//i.test(ch.url)) return true;
+  if (/\.php(\?|$)/i.test(ch.url)) return true;
+  return false;
 }
 
 function loadInto(S, ch, opts) {
@@ -500,14 +484,9 @@ function loadInto(S, ch, opts) {
 
   if (isHls && window.Hls && Hls.isSupported()) {
     const cfg = hlsCfgFor(ch);
-    // En modo proxy usamos un loader que enruta TODAS las peticiones.
-    if (S.proxyIdx >= 0) {
-      const L = makeProxyLoader(PROXIES[S.proxyIdx]);
-      if (L) cfg.loader = L;
-    }
     const hls = new Hls(cfg);
     S.hls = hls;
-    hls.loadSource(S.proxyIdx >= 0 ? ch.url : url);
+    hls.loadSource(url);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       showSkeleton(S, false);

@@ -6,12 +6,15 @@
  */
 
 const http = require("http");
+const https = require("https");
 const fs = require("fs");
 const path = require("path");
+const { URL } = require("url");
 
 const ROOT = __dirname;
 const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
+const MAX_REDIRECTS = 5;
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -38,7 +41,104 @@ function safeJoin(root, reqPath) {
   return resolved;
 }
 
+/* ------------------------------ Proxy HLS -------------------------------- */
+/**
+ * Proxy del mismo origen para streams de terceros. Resuelve dos problemas:
+ *  - Contenido mixto (http:// dentro de una web https://).
+ *  - Falta de cabeceras CORS y segmentos con rutas relativas.
+ * Reescribe los manifiestos .m3u8 para que TODAS las peticiones (variantes,
+ * segmentos y llaves) vuelvan a pasar por este mismo proxy.
+ */
+function fetchUpstream(targetUrl, redirectsLeft, cb) {
+  let u;
+  try { u = new URL(targetUrl); } catch (e) { cb(new Error("bad url")); return; }
+  if (u.protocol !== "http:" && u.protocol !== "https:") { cb(new Error("bad proto")); return; }
+  const mod = u.protocol === "https:" ? https : http;
+  const options = {
+    method: "GET",
+    headers: { "User-Agent": "Mozilla/5.0", Accept: "*/*" },
+  };
+  const upReq = mod.request(u, options, (up) => {
+    const status = up.statusCode || 0;
+    if (status >= 300 && status < 400 && up.headers.location && redirectsLeft > 0) {
+      const next = new URL(up.headers.location, u).toString();
+      up.resume();
+      fetchUpstream(next, redirectsLeft - 1, cb);
+      return;
+    }
+    cb(null, up, u.toString());
+  });
+  upReq.on("error", (e) => cb(e));
+  upReq.setTimeout(15000, () => upReq.destroy(new Error("timeout")));
+  upReq.end();
+}
+
+function isPlaylist(contentType, finalUrl) {
+  const ct = (contentType || "").toLowerCase();
+  if (ct.includes("mpegurl") || ct.includes("vnd.apple")) return true;
+  if (/\.m3u8?(\?|$)/i.test(finalUrl)) return true;
+  if (finalUrl.includes(".php")) return true;
+  return false;
+}
+
+function rewritePlaylist(body, baseUrl) {
+  const self = "/hls?u=";
+  const rewriteUri = (uri) => {
+    try { return self + encodeURIComponent(new URL(uri, baseUrl).toString()); }
+    catch (e) { return uri; }
+  };
+  return body.split(/\r?\n/).map((line) => {
+    const t = line.trim();
+    if (t === "") return line;
+    if (t.startsWith("#")) {
+      return line.replace(/URI="([^"]+)"/g, (_m, uri) => 'URI="' + rewriteUri(uri) + '"');
+    }
+    return rewriteUri(t);
+  }).join("\n");
+}
+
+function handleProxy(req, res) {
+  let target;
+  try { target = new URL(req.url, "http://x").searchParams.get("u"); }
+  catch (e) { target = null; }
+  if (!target) { res.writeHead(400); res.end("missing u"); return; }
+
+  fetchUpstream(target, MAX_REDIRECTS, (err, up, finalUrl) => {
+    if (err || !up) {
+      res.writeHead(502, { "Access-Control-Allow-Origin": "*" });
+      res.end("upstream error");
+      return;
+    }
+    const ct = up.headers["content-type"] || "";
+    if (isPlaylist(ct, finalUrl)) {
+      const chunks = [];
+      up.on("data", (d) => chunks.push(d));
+      up.on("end", () => {
+        const body = rewritePlaylist(Buffer.concat(chunks).toString("utf8"), finalUrl);
+        res.writeHead(200, {
+          "Content-Type": "application/vnd.apple.mpegurl; charset=utf-8",
+          "Access-Control-Allow-Origin": "*",
+          "Cache-Control": "no-store",
+        });
+        res.end(body);
+      });
+      up.on("error", () => { try { res.writeHead(502); res.end("stream error"); } catch (e) {} });
+    } else {
+      const headers = { "Access-Control-Allow-Origin": "*", "Cache-Control": "no-store" };
+      if (ct) headers["Content-Type"] = ct;
+      if (up.headers["content-length"]) headers["Content-Length"] = up.headers["content-length"];
+      res.writeHead(up.statusCode || 200, headers);
+      up.pipe(res);
+    }
+  });
+}
+
 const server = http.createServer((req, res) => {
+  if (req.url.startsWith("/hls?") || req.url === "/hls") {
+    handleProxy(req, res);
+    return;
+  }
+
   let urlPath = req.url === "/" ? "/index.html" : req.url;
   let filePath = safeJoin(ROOT, urlPath);
 
