@@ -175,11 +175,12 @@ const server = http.createServer((req, res) => {
     const ext = path.extname(filePath).toLowerCase();
     const type = MIME[ext] || "application/octet-stream";
 
-    // La playlist no debe cachearse para reflejar cambios de canales.
+    // Se evita cachear para reflejar despliegues al instante (evita servir
+    // JS/CSS viejos tras una actualizacion). La playlist tampoco se cachea.
     const cache =
       ext === ".m3u" || ext === ".m3u8"
         ? "no-store"
-        : ext === ".html"
+        : ext === ".html" || ext === ".js" || ext === ".css" || ext === ".mjs"
         ? "no-cache"
         : "public, max-age=3600";
 
