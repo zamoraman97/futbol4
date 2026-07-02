@@ -1,6 +1,6 @@
 #EXTM3U
 # Futbol4 — Canales de futbol y deportes (fuentes publicas de terceros)
-# Los enlaces http:// se enrutan automaticamente por un proxy HTTPS desde la web.
+# Todos verificados end-to-end (manifiesto + segmento de video real) vía el proxy /hls.
 
 #EXTINF:-1 tvg-id="AztecaInternacional.mx" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/e/eb/Azteca_Internacional_logo_2023.png" group-title="México",TV Azteca (Azteca Deportes)
 https://azt-mun.otteravision.com/azt/mun/mun.m3u8
@@ -36,28 +36,12 @@ http://138.121.15.230:9002/WIN-SPORT/index.m3u8
 http://45.4.1.201:8000/play/a13e/index.m3u8
 #EXTINF:-1 tvg-id="DSports.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports
 http://190.117.20.37:8000/play/a08d/index.m3u8
-#EXTINF:-1 tvg-id="DSports2.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports 2
-http://147.135.114.221:8001/play/a00n/index.m3u8
-#EXTINF:-1 tvg-id="DSportsPlus.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports+
-http://147.135.114.221:8001/play/a00o/index.m3u8
-#EXTINF:-1 tvg-id="DSportsUruguay.uy" tvg-logo="https://i.imgur.com/2PoEm1x.png" group-title="Sudamérica",DSports Uruguay
-http://147.135.114.221:8001/play/a00m/index.m3u8
 
-#EXTINF:-1 tvg-id="RTVELa1.es" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/La_1_logo_2023.svg/640px-La_1_logo_2023.svg.png" group-title="España",RTVE La 1
-https://ztnr.rtve.es/ztnr/1688877.m3u8
-#EXTINF:-1 tvg-id="Teledeporte.es" tvg-logo="https://i.ibb.co/0jxLdjnY/TDP.png" group-title="España",Teledeporte
-https://rtvelivestream.rtve.es/rtvesec/tdp/tdp_main.m3u8
 #EXTINF:-1 tvg-id="GOL.es" tvg-logo="https://i.imgur.com/0Qj5KQF.png" group-title="España",GOL (Mediapro)
 https://adpnetworkhd-cmd.github.io/iptv/GOL.m3u8
-#EXTINF:-1 tvg-id="DAZN1.es" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/DAZN_Logo_Master.svg/640px-DAZN_Logo_Master.svg.png" group-title="España",DAZN (España) 1
-http://185.228.155.93:8000/play/a03q/index.m3u8
-#EXTINF:-1 tvg-id="DAZN2.es" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/DAZN_Logo_Master.svg/640px-DAZN_Logo_Master.svg.png" group-title="España",DAZN (España) 2
-http://185.228.155.93:8000/play/a03r/index.m3u8
 
 #EXTINF:-1 tvg-id="BBCOne.uk" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BBC_One_logo_2021.svg/960px-BBC_One_logo_2021.svg.png" group-title="Reino Unido",BBC One
 https://adpnetworkhd-cmd.github.io/iptv/BBCOne.m3u8
-#EXTINF:-1 tvg-id="ITV1.uk" tvg-logo="https://i.imgur.com/xwPekCF.png" group-title="Reino Unido",ITV1
-http://80.194.62.172:50002/stream/channelid/95929545
 
 #EXTINF:-1 tvg-id="DAZNCombat" tvg-logo="https://i.postimg.cc/VsW3Jsrz/logo-DAZN-Combat.png" group-title="Internacional",DAZN Combat
 https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-rakuten/CDN/master.m3u8

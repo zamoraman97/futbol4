@@ -3,3 +3,11 @@ npm-debug.log*
 .DS_Store
 .env
 *.local
+proxy.log
+# listas temporales descargadas para pruebas
+mx.m3u
+es.m3u
+us.m3u
+ar.m3u
+uk.m3u
+sports.m3u

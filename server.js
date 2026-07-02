@@ -15,6 +15,13 @@ const ROOT = __dirname;
 const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
 const MAX_REDIRECTS = 5;
+const LOG_FILE = path.join(ROOT, "proxy.log");
+
+function logLine(obj) {
+  const line = JSON.stringify(Object.assign({ t: new Date().toISOString() }, obj));
+  try { fs.appendFileSync(LOG_FILE, line + "\n"); } catch (e) {}
+  console.log(line);
+}
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -57,18 +64,24 @@ function fetchUpstream(targetUrl, redirectsLeft, cb) {
   const options = {
     method: "GET",
     headers: { "User-Agent": "Mozilla/5.0", Accept: "*/*" },
+    // Muchos servidores de streams públicos tienen cadenas de certificado
+    // incompletas o autofirmadas. Al ser un proxy de reenvío, no verificamos
+    // el certificado del upstream (el navegador sí valida nuestro HTTPS).
+    rejectUnauthorized: false,
   };
   const upReq = mod.request(u, options, (up) => {
     const status = up.statusCode || 0;
     if (status >= 300 && status < 400 && up.headers.location && redirectsLeft > 0) {
       const next = new URL(up.headers.location, u).toString();
+      logLine({ ev: "redirect", from: u.toString(), to: next, status });
       up.resume();
       fetchUpstream(next, redirectsLeft - 1, cb);
       return;
     }
+    logLine({ ev: "upstream", url: u.toString(), status, ct: up.headers["content-type"] || "" });
     cb(null, up, u.toString());
   });
-  upReq.on("error", (e) => cb(e));
+  upReq.on("error", (e) => { logLine({ ev: "upstream_err", url: u.toString(), msg: e.message }); cb(e); });
   upReq.setTimeout(15000, () => upReq.destroy(new Error("timeout")));
   upReq.end();
 }
@@ -102,9 +115,11 @@ function handleProxy(req, res) {
   try { target = new URL(req.url, "http://x").searchParams.get("u"); }
   catch (e) { target = null; }
   if (!target) { res.writeHead(400); res.end("missing u"); return; }
+  logLine({ ev: "req", target });
 
   fetchUpstream(target, MAX_REDIRECTS, (err, up, finalUrl) => {
     if (err || !up) {
+      logLine({ ev: "proxy_fail", target, msg: err && err.message });
       res.writeHead(502, { "Access-Control-Allow-Origin": "*" });
       res.end("upstream error");
       return;
@@ -114,7 +129,9 @@ function handleProxy(req, res) {
       const chunks = [];
       up.on("data", (d) => chunks.push(d));
       up.on("end", () => {
-        const body = rewritePlaylist(Buffer.concat(chunks).toString("utf8"), finalUrl);
+        const raw = Buffer.concat(chunks).toString("utf8");
+        const body = rewritePlaylist(raw, finalUrl);
+        logLine({ ev: "playlist", finalUrl, bytes: raw.length, lines: raw.split(/\r?\n/).length });
         res.writeHead(200, {
           "Content-Type": "application/vnd.apple.mpegurl; charset=utf-8",
           "Access-Control-Allow-Origin": "*",
@@ -124,6 +141,7 @@ function handleProxy(req, res) {
       });
       up.on("error", () => { try { res.writeHead(502); res.end("stream error"); } catch (e) {} });
     } else {
+      logLine({ ev: "segment", finalUrl, ct, len: up.headers["content-length"] || "?" });
       const headers = { "Access-Control-Allow-Origin": "*", "Cache-Control": "no-store" };
       if (ct) headers["Content-Type"] = ct;
       if (up.headers["content-length"]) headers["Content-Length"] = up.headers["content-length"];
